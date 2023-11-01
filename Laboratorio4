@@ -1,0 +1,134 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// estructura del nodo
+struct Nodo {
+    int data;
+    struct Nodo* next;
+};
+
+// prototipos de la función
+void agregarNodo(struct Nodo** head, int data);
+void eliminarNodo(struct Nodo** head, int data);
+void agregarNodoInicio(struct Nodo** head, int data);
+void agregarNodoFinal(struct Nodo** head, int data);
+void buscarNodo(struct Nodo* head, int data);
+void printLista(struct Nodo* head);
+void obtenerElementoN(struct Nodo* head, int index);
+
+int main() {
+    struct Nodo* head = NULL;
+
+    // Agregar nodod
+    agregarNodo(&head, 1);
+    agregarNodo(&head, 2);
+    agregarNodo(&head, 3);
+
+    // Imprimir la lista
+    printLista(head);
+
+    // Borrar un nodo cuyo valor es 2
+    eliminarNodo(&head, 2);
+
+    // Imprimir la lista actualizada
+    printLista(head);
+
+    // Agrega un nodo al inicio, le daremos valor 0
+    agregarNodoInicio(&head, 0);
+
+    // Imprime la lista actualizada
+    printLista(head);
+
+    // Add node al final, le daremos valor 4
+    agregarNodoFinal(&head, 4);
+
+    // Imprime la lista actualizada
+    printLista(head);
+
+    // Busca un nodo, en este caso cuyo valor sea 3
+    buscarNodo(head, 3);
+
+    // Obtiene el segundo elemento
+    obtenerElementoN(head, 2);
+
+    return 0;
+}
+
+// Ahora va la definición de funciones, manteniendo el orden de la cabecera
+void agregarNodo(struct Nodo** head, int data) {
+    struct Nodo* nuevoNodo = (struct Nodo*) malloc(sizeof(struct Nodo));
+    nuevoNodo->data = data;
+    nuevoNodo->next = *head;
+    *head = nuevoNodo;
+}
+
+void eliminarNodo(struct Nodo** head, int data) {
+    struct Nodo* temp = *head, *prev;
+    if (temp != NULL && temp->data == data) {
+	*head = temp->next;
+	free(temp);
+	return;
+    }
+    while (temp != NULL && temp->data != data) {
+	prev = temp;
+	temp = temp->next;
+    }
+    if (temp == NULL) return;
+    prev->next = temp->next;
+    free(temp);
+}
+
+void agregarNodoInicio(struct Nodo** head, int data) {
+    struct Nodo* nuevoNodo = (struct Nodo*) malloc(sizeof(struct Nodo));
+    nuevoNodo->data = data;
+    nuevoNodo->next = *head;
+    *head = nuevoNodo;
+}
+
+void agregarNodoFinal(struct Nodo** head, int data) {
+    struct Nodo* nuevoNodo = (struct Nodo*) malloc(sizeof(struct Nodo));
+    struct Nodo* last = *head;
+    nuevoNodo->data = data;
+    nuevoNodo->next = NULL;
+    if (*head == NULL) {
+	*head = nuevoNodo;
+	return;
+    }
+    while (last->next != NULL) {
+	last = last->next;
+    }
+    last->next = nuevoNodo;
+    return;
+}
+
+void buscarNodo(struct Nodo* head, int data) {
+    while (head != NULL) {
+	if (head->data == data) {
+	    printf("El nodo con el valor %d existe.\n", data);
+	    return;
+	}
+	head = head->next;
+    }
+    printf("El nodo con el valor %d no existe.\n", data);
+}
+
+void printLista(struct Nodo* head) {
+    while (head != NULL) {
+	printf("%d ", head->data);
+	head = head->next;
+    }
+    printf("\n");
+}
+
+void obtenerElementoN(struct Nodo* head, int index) {
+    int count = 0;
+    while (head != NULL) {
+	if (count == index) {
+	    printf("Elemento en índice %d es %d\n", index, head->data);
+	    return;
+	}
+	count++;
+	head = head->next;
+    }
+    printf("Elemento en índice %d no existe.\n", index);
+}
